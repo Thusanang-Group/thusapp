@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Thusanang</string>
+    <string name="students">STUDENTS</string>
+    <string name="teachers">TEACHERS</string>
+    <string name="parents">PARENTS</string>
+    <string name="country_prompt">Choose a Path</string>
+    <string name="dashboard">DASHBOARD</string>
+    <string name="student_credentials">Student credentials</string>
+    <string-array name="country_arrays">
+        <item>Student</item>
+        <item>Parent</item>
+        <item>Guardian</item>
+
+    </string-array>
+</resources>

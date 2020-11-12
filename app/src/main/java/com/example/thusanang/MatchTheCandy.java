@@ -2,10 +2,14 @@ package com.example.thusanang;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MatchTheCandy extends AppCompatActivity {
 
@@ -18,8 +22,12 @@ public class MatchTheCandy extends AppCompatActivity {
             R.drawable.administrator
     };
 
-    int widthOfBlock, noOfBlock = 8, widthOfScreen ;
+    int widthOfBlock, noOfBlock = 4, widthOfScreen ;
+    ArrayList <ImageView> candy = new ArrayList<>();
+    int candyToBeDragged, candyToBeReplaced;
 
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +39,51 @@ public class MatchTheCandy extends AppCompatActivity {
         int heightOfScreen = displayMetrics.heightPixels;
         widthOfBlock = widthOfScreen / noOfBlock;
         createBlock();
+        for(final ImageView imageView : candy){
+            imageView.setOnTouchListener(new OnSwipeListener(this){
+                @Override
+                void onSwipeLeft() {
+                    super.onSwipeLeft();
+                    candyToBeDragged = imageView.getId();
+                    candyToBeReplaced = candyToBeDragged -1;
+                    Interchange();
+
+                }
+
+                @Override
+                void onSwipeRight() {
+                    super.onSwipeRight();
+                    candyToBeDragged = imageView.getId();
+                    candyToBeReplaced = candyToBeDragged +1;
+                    Interchange();
+                }
+
+                @Override
+                void onSwipeTop() {
+                    super.onSwipeTop();
+                    candyToBeDragged = imageView.getId();
+                    candyToBeReplaced = candyToBeDragged - noOfBlock;
+                    Interchange();
+                }
+
+                @Override
+                void onSwipeBottom() {
+                    super.onSwipeBottom();
+                    candyToBeDragged = imageView.getId();
+                    candyToBeReplaced = candyToBeDragged + noOfBlock;
+                    Interchange();
+                }
+            });
+        }
+
+    }
+    private void Interchange(){
+        int background = (int) candy.get(candyToBeReplaced).getTag();
+        int background1 = (int) candy.get(candyToBeDragged).getTag();
+        candy.get(candyToBeDragged).setImageResource(background);
+        candy.get(candyToBeReplaced).setImageResource(background1);
+        candy.get(candyToBeDragged).setTag(background);
+        candy.get(candyToBeReplaced).setTag(background1);
 
     }
     private void createBlock(){
@@ -52,6 +105,8 @@ public class MatchTheCandy extends AppCompatActivity {
 
             int randomCandy = (int) Math.floor(Math.random() * candies.length);
             imageView.setImageResource(candies[randomCandy]);
+            imageView.setTag(candies[randomCandy]);
+            candy.add(imageView);
             gridLayout.addView(imageView);
 
         }
